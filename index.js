@@ -19,14 +19,16 @@ var version = require('./package.json').version;
 var NDC = function (config) {
     var ndc = this;
     ndc.config = config;
-    ndc.version = '15.2';
+    ndc.version = 'IATA2017.1';
     // Ignore where to get these from
     ndc.transactionID = 'TRN12345';
 
     var makeRequest = function (body, cb, prolog, message) {
         var url = /^http:/.test(ndc.config.endpoint) ? ndc.config.endpoint : 'http' + (ndc.ssl ? 's' : '') + '://' + ndc.config.endpoint + '/dondc';
         body = (prolog ? XMLProlog : '') + body;
+
         debug.info('Posting message to %s:\n%s', url, body);
+
         request({
             uri: url,
             method: 'POST',
@@ -50,6 +52,7 @@ var NDC = function (config) {
             debug.info('Status Code: %s', res.statusCode);
             debug.info('Headers %j:', res.headers);
             debug.info('Raw Body:\n', body);
+
             xml2js.parseString(res.body, function (err, data) {
                 if (err || !data) {
                     err = err || new Error('Empty Response');
@@ -95,7 +98,7 @@ var NDC = function (config) {
                 airline: ndc.config.airline,
                 sender: ndc.config.sender,
                 agent: ndc.config.agent,
-                courrencyCode: ndc.config.courrencyCode,
+                currencyCode: ndc.config.currencyCode,
                 countryCode: ndc.config.countryCode,
                 cityCode: ndc.config.cityCode,
                 language: ndc.config.language,
@@ -106,9 +109,9 @@ var NDC = function (config) {
             var result = util._extend(messageHandler(messageData),
                 /* XML message attributes */
                 {
-                    _xmlns: 'http://www.iata.org/IATA/EDIST',
+                    _xmlns: 'http://www.iata.org/IATA/EDIST/2017.1',
                     '_xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                    '_xsi:schemaLocation': 'http://www.iata.org/IATA/EDIST ../' + name + 'RQ.xsd',
+                    '_xsi:schemaLocation': 'http://www.iata.org/IATA/EDIST/2017.1 ../' + name + 'RQ.xsd',
                     _EchoToken: require('crypto').createHash('sha1').update(now).digest().toString('hex'),
                     _TimeStamp: now,
                     _Version: ndc.version,

@@ -4,7 +4,7 @@
   "description": "IATA NDC-compliant API wrapper",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/jshint/bin/jshint *.js lib/**/*.js && NODE_ENV=test node_modules/mocha/bin/mocha -R spec ./test/*.test.js"
+    "test": "jshint && mocha"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,12 @@
   },
   "homepage": "https://github.com/iata-ndc/ndc-js#readme",
   "dependencies": {
+    "debug": "^2.6.8",
     "easyxml": "^1.0.0",
+    "jshint": "^2.9.5",
+    "mocha": "^2.5.3",
     "request": "^2.64.0",
+    "should": "^7.1.1",
     "xml2js": "^0.4.12"
   },
   "devDependencies": {

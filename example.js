@@ -1,9 +1,9 @@
 'use strict';
 var NDC = require('./'),
     testData = require('./test/test-data');
-
-testData.config[0].APIAuthKey = testData.config[1].APIAuthKey = process.env.API_KEY;
-
+if (process.env.API_KEY) {
+    testData.config[0].APIAuthKey = testData.config[1].APIAuthKey = process.env.API_KEY;
+}
 var kronos = new NDC(testData.config[0]),
     usdtravel = new NDC(testData.config[1]);
 
@@ -15,8 +15,9 @@ var kronos = new NDC(testData.config[0]),
 // var message = kronos.messages.OrderList(testData.OrderList[0]);
 // var message = kronos.messages.OrderRetrieve(testData.OrderRetrieve[0]);
 // require('fs').writeFileSync('/tmp/debug.xml', message.toXML(true, true));
-var message = kronos.messages.OrderCreate(testData.OrderCreate[0]);
-message.request(function (err, data) {
+// var message = kronos.messages.OrderCreate(testData.OrderCreate[0]);
+var message = kronos.messages.AirShopping(testData.AirShopping[0])
+message.request(function(err, data) {
     if (err) {
         return console.error(err);
     }
